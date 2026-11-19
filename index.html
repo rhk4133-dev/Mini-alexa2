@@ -323,13 +323,13 @@ body { background: #fff; }
 .photo-card {
     position: absolute;
 
-    width: 34vw;
-    max-width: 155px;
-    min-width: 120px;
+    width: 40vw;
+    max-width: 185px;
+    min-width: 140px;
 
-    padding: 7px;
+    padding: 8px;
     background: #171717;
-    border-radius: 16px;
+    border-radius: 18px;
     box-shadow: 0 14px 32px rgba(0,0,0,.22);
     overflow: hidden;
     z-index: 3;
@@ -345,7 +345,7 @@ body { background: #fff; }
     width: 100%;
     aspect-ratio: 1 / 1;
     overflow: hidden;
-    border-radius: 10px;
+    border-radius: 12px;
     background: #333;
 }
 
@@ -359,12 +359,12 @@ body { background: #fff; }
 /* MUSIC DETAILS */
 
 .music-info {
-    padding: 9px 4px 4px;
+    padding: 10px 4px 4px;
     color: #fff;
 }
 
 .music-title {
-    font-size: 11px;
+    font-size: 13px;
     font-weight: bold;
     white-space: nowrap;
     overflow: hidden;
@@ -373,7 +373,7 @@ body { background: #fff; }
 }
 
 .music-subtitle {
-    font-size: 9px;
+    font-size: 10px;
     color: #aaa;
 }
 
@@ -384,7 +384,7 @@ body { background: #fff; }
     height: 3px;
     background: #555;
     border-radius: 10px;
-    margin: 9px 0 8px;
+    margin: 10px 0 8px;
     overflow: hidden;
 }
 
@@ -401,27 +401,27 @@ body { background: #fff; }
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 17px;
-    height: 26px;
+    gap: 19px;
+    height: 30px;
     color: white;
 }
 
 .control {
-    font-size: 14px;
+    font-size: 15px;
     color: #ddd;
     line-height: 1;
 }
 
 .play-control {
-    width: 27px;
-    height: 27px;
+    width: 30px;
+    height: 30px;
     border-radius: 50%;
     background: #fff;
     color: #111;
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 12px;
+    font-size: 13px;
     padding-left: 2px;
 }
 
@@ -457,31 +457,31 @@ body { background: #fff; }
 /* FIVE CARD POSITIONS */
 
 .card1 {
-    top: 5%;
-    left: 4%;
+    top: 4%;
+    left: 3%;
     rotate: -7deg;
 }
 
 .card2 {
-    top: 5%;
-    right: 4%;
+    top: 4%;
+    right: 3%;
     rotate: 7deg;
 }
 
 .card3 {
-    top: 38%;
-    left: 2%;
+    top: 37%;
+    left: 1%;
     rotate: -6deg;
 }
 
 .card4 {
-    top: 38%;
-    right: 2%;
+    top: 37%;
+    right: 1%;
     rotate: 7deg;
 }
 
 .card5 {
-    bottom: 4%;
+    bottom: 2%;
     left: 50%;
     translate: -50% 0;
     rotate: -3deg;
@@ -561,14 +561,14 @@ body { background: #fff; }
 
 @media (max-width: 380px) {
     .photo-card {
-        width: 33vw;
-        min-width: 110px;
-        padding: 6px;
+        width: 39vw;
+        min-width: 130px;
+        padding: 7px;
     }
 
-    .music-title { font-size: 10px; }
-    .music-subtitle { font-size: 8px; }
-    .music-controls { gap: 13px; }
+    .music-title { font-size: 12px; }
+    .music-subtitle { font-size: 9px; }
+    .music-controls { gap: 15px; }
 
     .search-box {
         width: 88%;
@@ -581,6 +581,11 @@ body { background: #fff; }
 </style>
 </head>
 <body>
+
+<!-- HIDDEN YOUTUBE MUSIC PLAYER -->
+<div style="position:fixed; left:-10px; top:-10px; width:1px; height:1px; opacity:0; pointer-events:none; overflow:hidden;">
+    <div id="ytPlayer"></div>
+</div>
 
 <!-- SPOTIFY LOGO -->
 
@@ -742,6 +747,62 @@ body { background: #fff; }
 <script>
 let started = false;
 
+/* BACKGROUND MUSIC (YouTube) */
+
+const SONG_ID = "O-C2QsMecSA";
+let ytPlayer = null;
+let ytReady = false;
+
+// Load the YouTube player API
+(function () {
+    const tag = document.createElement("script");
+    tag.src = "https://www.youtube.com/iframe_api";
+    document.head.appendChild(tag);
+})();
+
+// YouTube calls this automatically when its API is ready
+function onYouTubeIframeAPIReady() {
+    ytPlayer = new YT.Player("ytPlayer", {
+        height: "1",
+        width: "1",
+        videoId: SONG_ID,
+        playerVars: {
+            autoplay: 0,
+            controls: 0,
+            playsinline: 1,
+            loop: 1,
+            playlist: SONG_ID,
+            rel: 0,
+            modestbranding: 1
+        },
+        events: {
+            onReady: function () { ytReady = true; }
+        }
+    });
+}
+
+function playMusic(attempt) {
+    attempt = attempt || 0;
+
+    if (ytPlayer && ytReady) {
+        try {
+            ytPlayer.setVolume(0);
+            ytPlayer.playVideo();
+
+            // Slowly fade the volume in up to 60
+            let vol = 0;
+            const fade = setInterval(function () {
+                vol += 5;
+                ytPlayer.setVolume(vol);
+                if (vol >= 60) clearInterval(fade);
+            }, 150);
+        } catch (e) {}
+    } else if (attempt < 20) {
+        // Player not ready yet, try again shortly
+        setTimeout(function () { playMusic(attempt + 1); }, 500);
+    }
+}
+
 /* WHOOSH SOUND (no file needed) */
 
 function playWhoosh() {
@@ -814,6 +875,9 @@ function startWish() {
 
     button.style.display = "none";
 
+    // Start the background song (the button tap allows it)
+    playMusic();
+
     // Play the whoosh sound together with the animation
     playWhoosh();
 
@@ -858,14 +922,15 @@ function startWish() {
         }, time);
     });
 
-    // Search bar
+    // Search bar appears AFTER all 5 cards have shown
     setTimeout(() => {
         searchBox.classList.add("show");
-    }, 1550);
+    }, 8600);
 
+    // Typing starts after the search bar has appeared
     setTimeout(() => {
         startTyping();
-    }, 2200);
+    }, 9400);
 }
 
 /* TYPEWRITER EFFECT */
