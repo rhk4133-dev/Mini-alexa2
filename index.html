@@ -20,11 +20,9 @@ html, body {
     font-family: Arial, sans-serif;
 }
 
-body {
-    background: #fff;
-}
+body { background: #fff; }
 
-/* SPOTIFY-STYLE LOGO */
+/* LOGO */
 
 .logo {
     position: absolute;
@@ -73,7 +71,7 @@ body {
     50% { stroke: #fff; }
 }
 
-/* SURPRISE BUTTON */
+/* BUTTON */
 
 .surprise-btn {
     position: absolute;
@@ -105,7 +103,7 @@ body {
     }
 }
 
-/* BLACK TRANSITION */
+/* TRANSITION */
 
 .wipe-circle {
     position: fixed;
@@ -129,13 +127,17 @@ body {
         transform: translate(-50%, -50%) scale(0);
         opacity: 1;
     }
-    65%, 100% {
+    65% {
         transform: translate(-50%, -50%) scale(45);
         opacity: 1;
     }
+    100% {
+        transform: translate(-50%, -50%) scale(45);
+        opacity: 0;
+    }
 }
 
-/* MAIN LIGHT SCENE */
+/* LIGHT BACKGROUND */
 
 .scene {
     position: fixed;
@@ -159,9 +161,8 @@ body {
 
 .scene.show {
     visibility: visible;
-    animation:
-        sceneAppear .8s ease forwards,
-        backgroundFlow 16s ease-in-out 1s infinite;
+    animation: sceneAppear .8s ease forwards,
+               backgroundFlow 16s ease-in-out 1s infinite;
 }
 
 @keyframes sceneAppear {
@@ -225,7 +226,7 @@ body {
     to { transform: translate(20px, -25px) scale(1.15); }
 }
 
-/* FLOATING PARTICLES */
+/* PARTICLES */
 
 .particles span {
     position: absolute;
@@ -249,7 +250,7 @@ body {
     to { transform: translateY(-25px); opacity: .9; }
 }
 
-/* CONNECTING LINE: EXACTLY 2PX */
+/* CONNECTING LINE - 2PX */
 
 .connection {
     position: absolute;
@@ -279,7 +280,7 @@ body {
     to { stroke-dashoffset: 0; }
 }
 
-/* MOVING DOT */
+/* MOVING LIGHT DOT */
 
 .line-dot {
     position: absolute;
@@ -318,25 +319,28 @@ body {
     }
 }
 
-/* BIG MUSIC CARDS */
+/* BIGGER MUSIC CARDS */
 
 .photo-card {
     position: absolute;
+
     width: 34vw;
     max-width: 155px;
     min-width: 120px;
+
     padding: 7px;
     background: #171717;
     border-radius: 16px;
     box-shadow: 0 14px 32px rgba(0,0,0,.22);
     overflow: hidden;
     z-index: 3;
+
     opacity: 0;
     visibility: hidden;
     transform: scale(.65);
 }
 
-/* PHOTO */
+/* PHOTO COVER */
 
 .cover {
     width: 100%;
@@ -353,7 +357,7 @@ body {
     object-fit: cover;
 }
 
-/* MUSIC INFORMATION */
+/* MUSIC DETAILS */
 
 .music-info {
     padding: 9px 4px 4px;
@@ -451,7 +455,7 @@ body {
     to { margin-top: -9px; }
 }
 
-/* CARD POSITIONS */
+/* FIVE CARD POSITIONS */
 
 .card1 {
     top: 5%;
@@ -484,7 +488,7 @@ body {
     rotate: -3deg;
 }
 
-/* CENTER SEARCH BAR */
+/* SEARCH BAR */
 
 .search-box {
     position: fixed;
@@ -554,7 +558,7 @@ body {
     50% { opacity: 0; }
 }
 
-/* SMALL MOBILE SCREENS */
+/* SMALL PHONES */
 
 @media (max-width: 380px) {
     .photo-card {
@@ -580,7 +584,7 @@ body {
 
 <body>
 
-<!-- LOGO -->
+<!-- SPOTIFY LOGO -->
 
 <div class="logo" id="logo">
     <svg viewBox="0 0 100 100">
@@ -607,12 +611,8 @@ body {
     <div class="glow glow4"></div>
 
     <div class="particles">
-        <span></span>
-        <span></span>
-        <span></span>
-        <span></span>
-        <span></span>
-        <span></span>
+        <span></span><span></span><span></span>
+        <span></span><span></span><span></span>
     </div>
 
     <!-- CONNECTING LINE -->
@@ -633,7 +633,7 @@ body {
 
     <div class="photo-card card1" id="card1">
         <div class="cover">
-            <img src="portrait1.jpg" alt="Photo 1">
+            <img src="photos/portrait1.jpg" alt="Photo 1">
         </div>
         <div class="music-info">
             <div class="music-title">Special Moments</div>
@@ -653,7 +653,7 @@ body {
 
     <div class="photo-card card2" id="card2">
         <div class="cover">
-            <img src="portrait2.jpg" alt="Photo 2">
+            <img src="photos/portrait2.jpg" alt="Photo 2">
         </div>
         <div class="music-info">
             <div class="music-title">Beautiful Memories</div>
@@ -673,7 +673,7 @@ body {
 
     <div class="photo-card card3" id="card3">
         <div class="cover">
-            <img src="portrait3.jpg" alt="Photo 3">
+            <img src="photos/portrait3.jpg" alt="Photo 3">
         </div>
         <div class="music-info">
             <div class="music-title">Happy Times</div>
@@ -693,7 +693,7 @@ body {
 
     <div class="photo-card card4" id="card4">
         <div class="cover">
-            <img src="portrait4.jpg" alt="Photo 4">
+            <img src="photos/portrait4.jpg" alt="Photo 4">
         </div>
         <div class="music-info">
             <div class="music-title">Golden Moments</div>
@@ -713,7 +713,7 @@ body {
 
     <div class="photo-card card5" id="card5">
         <div class="cover">
-            <img src="portrait5.jpg" alt="Photo 5">
+            <img src="photos/portrait5.jpg" alt="Photo 5">
         </div>
         <div class="music-info">
             <div class="music-title">One More Memory</div>
@@ -766,18 +766,18 @@ function startWish() {
         scene.classList.add("show");
     }, 700);
 
-    // First photo
+    // First photo appears
     setTimeout(() => {
         document.getElementById("card1").classList.add("visible");
     }, 1300);
 
-    // Connecting line and moving dot
+    // Connecting line animation
     setTimeout(() => {
         document.getElementById("connectionPath").classList.add("animate");
         document.getElementById("lineDot").classList.add("animate");
     }, 1900);
 
-    // Remaining photos
+    // Reveal remaining photos one by one
     const revealTimes = [3000, 4500, 6000, 7500];
 
     revealTimes.forEach((time, index) => {
@@ -792,10 +792,12 @@ function startWish() {
         searchBox.classList.add("show");
     }, 1550);
 
-    setTimeout(startTyping, 2200);
+    setTimeout(() => {
+        startTyping();
+    }, 2200);
 }
 
-/* TYPEWRITER TEXT */
+/* TYPEWRITER EFFECT */
 
 const messages = [
     "Your text will appear here...",
@@ -843,4 +845,3 @@ function startTyping() {
 
 </body>
 </html>
-                                         
